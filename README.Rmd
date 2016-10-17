@@ -13,7 +13,7 @@ This is code to implement beta regression similar to the [`betareg` package](htt
 
 ## Simulated data
 
-A minimal simulation model can be used to 
+A minimal simulation model can be used to relate the value of a beta distributed random variable, `y`, to two covariates, `x1` and `x2`.
 
 ```{r, ggplot2}
 library(betareg)
@@ -34,12 +34,66 @@ qplot(y, geom = "histogram", binwidth = .025)
 
 ```
 
-## Including Plots
+## betareg
 
-You can also embed plots, for example:
+The simulated data can be fit using the `betareg` package as follow:
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r}
+brmod <- betareg(y ~ ., data = data.frame(y, X[,-1]))
+summary(brmod)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+## Stan
+
+We can fit the same model Stan with the following code:
+
+```{r}
+
+stan_beta <- "
+data {
+  int<lower=1> N;
+  int<lower=1> K;
+  vector<lower=0,upper=1>[N] y;
+  matrix[N,K] X;
+
+}
+
+parameters {
+  vector[K] gamma;
+  real<lower=0> phi;
+}
+transformed parameters{
+  vector<lower=0,upper=1>[N] mu;    // transformed linear predictor
+  vector<lower=0>[N] A;             // parameter for beta distn
+  vector<lower=0>[N] B;             // parameter for beta distn
+
+  for (i in 1:N)
+    mu[i] = inv_logit(X[i,] * gamma);   
+  A = mu * phi;
+  B = (1.0 - mu) * phi;
+}
+model {
+
+  // priors
+  // gamma ~ normal(0, 1);   
+  // phi ~ cauchy(0, 5);               // different options for phi  
+  // phi ~ inv_gamma(.001, .001);
+  // phi ~ uniform(0, 500);          // put upper on phi if using this
+  // likelihood
+  y ~ beta(A, B);
+
+}
+"
+# Stan data list
+dat = list(N = length(y), K=ncol(X), y=y, X=X)
+
+beta_stan_test <- stan(model_code = stan_beta,
+     data       = dat,
+     pars       = c("gamma", "phi"))
+```
+
+
+Which yields the following output:
+```{r}
+summary(beta_stan_test)$summary
+```
