@@ -1,0 +1,45 @@
+---
+title: "Beta Regression in Stan"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Beta Regression in Stan
+
+This is code to implement beta regression similar to the [`betareg` package](https://cran.r-project.org/web/packages/betareg/index.html) in [Stan](http://mc-stan.org/).
+
+## Simulated data
+
+A minimal simulation model can be used to 
+
+```{r, ggplot2}
+library(betareg)
+library(rstan)
+library(dplyr)
+
+N = 500
+x1 = rnorm(N)
+x2 = rnorm(N)
+X = cbind(1, x1, x2)
+beta = c(-1,.2,-.3)
+mu = plogis(X%*%beta)  # add noise if desired + rnorm(N, sd=.01)
+phi = 10
+A = mu*phi
+B = (1-mu)*phi
+y = rbeta(N, A, B)
+qplot(y, geom = "histogram", binwidth = .025)
+
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
