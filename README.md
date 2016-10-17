@@ -14,34 +14,8 @@ A minimal simulation model can be used to relate the value of a beta distributed
 ``` r
 library(betareg)
 library(rstan)
-```
-
-    ## Loading required package: ggplot2
-
-    ## Loading required package: StanHeaders
-
-    ## rstan (Version 2.12.1, packaged: 2016-09-11 13:07:50 UTC, GitRev: 85f7a56811da)
-
-    ## For execution on a local, multicore CPU with excess RAM we recommend calling
-    ## rstan_options(auto_write = TRUE)
-    ## options(mc.cores = parallel::detectCores())
-
-``` r
 library(dplyr)
-```
 
-    ## 
-    ## Attaching package: 'dplyr'
-
-    ## The following objects are masked from 'package:stats':
-    ## 
-    ##     filter, lag
-
-    ## The following objects are masked from 'package:base':
-    ## 
-    ##     intersect, setdiff, setequal, union
-
-``` r
 N = 500
 x1 = rnorm(N)
 x2 = rnorm(N)
@@ -73,24 +47,24 @@ summary(brmod)
     ## 
     ## Standardized weighted residuals 2:
     ##     Min      1Q  Median      3Q     Max 
-    ## -3.4724 -0.5896  0.0495  0.6394  2.7698 
+    ## -3.6621 -0.5703  0.0347  0.7317  2.5384 
     ## 
     ## Coefficients (mean model with logit link):
     ##             Estimate Std. Error z value Pr(>|z|)    
-    ## (Intercept) -1.00491    0.03135 -32.051  < 2e-16 ***
-    ## x1           0.16651    0.03082   5.403 6.57e-08 ***
-    ## x2          -0.28723    0.03064  -9.373  < 2e-16 ***
+    ## (Intercept) -1.03877    0.03066 -33.881   <2e-16 ***
+    ## x1           0.24226    0.02922   8.292   <2e-16 ***
+    ## x2          -0.37251    0.02970 -12.544   <2e-16 ***
     ## 
     ## Phi coefficients (precision model with identity link):
     ##       Estimate Std. Error z value Pr(>|z|)    
-    ## (phi)   9.6437     0.5904   16.34   <2e-16 ***
+    ## (phi)  10.3718     0.6381   16.25   <2e-16 ***
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
     ## 
     ## Type of estimator: ML (maximum likelihood)
-    ## Log-likelihood: 322.3 on 4 Df
-    ## Pseudo R-squared: 0.1805
-    ## Number of iterations: 16 (BFGS) + 2 (Fisher scoring)
+    ## Log-likelihood: 353.8 on 4 Df
+    ## Pseudo R-squared: 0.3029
+    ## Number of iterations: 12 (BFGS) + 3 (Fisher scoring)
 
 Stan
 ----
@@ -141,113 +115,6 @@ beta_stan_test <- stan(model_code = stan_beta,
      pars       = c("gamma", "phi"))
 ```
 
-    ## 
-    ## SAMPLING FOR MODEL '382b1c68da14e9cc8bda0f2a11f59ecc' NOW (CHAIN 1).
-    ## 
-    ## Chain 1, Iteration:    1 / 2000 [  0%]  (Warmup)
-    ## Chain 1, Iteration:  200 / 2000 [ 10%]  (Warmup)
-    ## Chain 1, Iteration:  400 / 2000 [ 20%]  (Warmup)
-    ## Chain 1, Iteration:  600 / 2000 [ 30%]  (Warmup)
-    ## Chain 1, Iteration:  800 / 2000 [ 40%]  (Warmup)
-    ## Chain 1, Iteration: 1000 / 2000 [ 50%]  (Warmup)
-    ## Chain 1, Iteration: 1001 / 2000 [ 50%]  (Sampling)
-    ## Chain 1, Iteration: 1200 / 2000 [ 60%]  (Sampling)
-    ## Chain 1, Iteration: 1400 / 2000 [ 70%]  (Sampling)
-    ## Chain 1, Iteration: 1600 / 2000 [ 80%]  (Sampling)
-    ## Chain 1, Iteration: 1800 / 2000 [ 90%]  (Sampling)
-    ## Chain 1, Iteration: 2000 / 2000 [100%]  (Sampling)
-    ##  Elapsed Time: 2.121 seconds (Warm-up)
-    ##                2.258 seconds (Sampling)
-    ##                4.379 seconds (Total)
-    ## 
-    ## [1] "The following numerical problems occured the indicated number of times after warmup on chain 1"
-    ##                                                                                          count
-    ## Exception thrown at line 32: beta_log: Second shape parameter[2] is 0, but must be > 0!      4
-    ## Exception thrown at line 32: beta_log: Second shape parameter[65] is 0, but must be > 0!     1
-    ## [1] "When a numerical problem occurs, the Hamiltonian proposal gets rejected."
-    ## [1] "See http://mc-stan.org/misc/warnings.html#exception-hamiltonian-proposal-rejected"
-    ## [1] "If the number in the 'count' column is small,  do not ask about this message on stan-users."
-    ## 
-    ## SAMPLING FOR MODEL '382b1c68da14e9cc8bda0f2a11f59ecc' NOW (CHAIN 2).
-    ## 
-    ## Chain 2, Iteration:    1 / 2000 [  0%]  (Warmup)
-    ## Chain 2, Iteration:  200 / 2000 [ 10%]  (Warmup)
-    ## Chain 2, Iteration:  400 / 2000 [ 20%]  (Warmup)
-    ## Chain 2, Iteration:  600 / 2000 [ 30%]  (Warmup)
-    ## Chain 2, Iteration:  800 / 2000 [ 40%]  (Warmup)
-    ## Chain 2, Iteration: 1000 / 2000 [ 50%]  (Warmup)
-    ## Chain 2, Iteration: 1001 / 2000 [ 50%]  (Sampling)
-    ## Chain 2, Iteration: 1200 / 2000 [ 60%]  (Sampling)
-    ## Chain 2, Iteration: 1400 / 2000 [ 70%]  (Sampling)
-    ## Chain 2, Iteration: 1600 / 2000 [ 80%]  (Sampling)
-    ## Chain 2, Iteration: 1800 / 2000 [ 90%]  (Sampling)
-    ## Chain 2, Iteration: 2000 / 2000 [100%]  (Sampling)
-    ##  Elapsed Time: 2.191 seconds (Warm-up)
-    ##                1.976 seconds (Sampling)
-    ##                4.167 seconds (Total)
-    ## 
-    ## [1] "The following numerical problems occured the indicated number of times after warmup on chain 2"
-    ##                                                                                          count
-    ## Exception thrown at line 32: beta_log: Second shape parameter[6] is 0, but must be > 0!      3
-    ## Exception thrown at line 32: beta_log: Second shape parameter[44] is 0, but must be > 0!     1
-    ## [1] "When a numerical problem occurs, the Hamiltonian proposal gets rejected."
-    ## [1] "See http://mc-stan.org/misc/warnings.html#exception-hamiltonian-proposal-rejected"
-    ## [1] "If the number in the 'count' column is small,  do not ask about this message on stan-users."
-    ## 
-    ## SAMPLING FOR MODEL '382b1c68da14e9cc8bda0f2a11f59ecc' NOW (CHAIN 3).
-    ## 
-    ## Chain 3, Iteration:    1 / 2000 [  0%]  (Warmup)
-    ## Chain 3, Iteration:  200 / 2000 [ 10%]  (Warmup)
-    ## Chain 3, Iteration:  400 / 2000 [ 20%]  (Warmup)
-    ## Chain 3, Iteration:  600 / 2000 [ 30%]  (Warmup)
-    ## Chain 3, Iteration:  800 / 2000 [ 40%]  (Warmup)
-    ## Chain 3, Iteration: 1000 / 2000 [ 50%]  (Warmup)
-    ## Chain 3, Iteration: 1001 / 2000 [ 50%]  (Sampling)
-    ## Chain 3, Iteration: 1200 / 2000 [ 60%]  (Sampling)
-    ## Chain 3, Iteration: 1400 / 2000 [ 70%]  (Sampling)
-    ## Chain 3, Iteration: 1600 / 2000 [ 80%]  (Sampling)
-    ## Chain 3, Iteration: 1800 / 2000 [ 90%]  (Sampling)
-    ## Chain 3, Iteration: 2000 / 2000 [100%]  (Sampling)
-    ##  Elapsed Time: 2.199 seconds (Warm-up)
-    ##                2.116 seconds (Sampling)
-    ##                4.315 seconds (Total)
-    ## 
-    ## [1] "The following numerical problems occured the indicated number of times after warmup on chain 3"
-    ##                                                                                           count
-    ## Exception thrown at line 32: beta_log: Second shape parameter[3] is 0, but must be > 0!       3
-    ## Exception thrown at line 32: beta_log: First shape parameter[313] is 0, but must be > 0!      1
-    ## Exception thrown at line 32: beta_log: Second shape parameter[2] is 0, but must be > 0!       1
-    ## Exception thrown at line 32: beta_log: Second shape parameter[313] is 0, but must be > 0!     1
-    ## [1] "When a numerical problem occurs, the Hamiltonian proposal gets rejected."
-    ## [1] "See http://mc-stan.org/misc/warnings.html#exception-hamiltonian-proposal-rejected"
-    ## [1] "If the number in the 'count' column is small,  do not ask about this message on stan-users."
-    ## 
-    ## SAMPLING FOR MODEL '382b1c68da14e9cc8bda0f2a11f59ecc' NOW (CHAIN 4).
-    ## 
-    ## Chain 4, Iteration:    1 / 2000 [  0%]  (Warmup)
-    ## Chain 4, Iteration:  200 / 2000 [ 10%]  (Warmup)
-    ## Chain 4, Iteration:  400 / 2000 [ 20%]  (Warmup)
-    ## Chain 4, Iteration:  600 / 2000 [ 30%]  (Warmup)
-    ## Chain 4, Iteration:  800 / 2000 [ 40%]  (Warmup)
-    ## Chain 4, Iteration: 1000 / 2000 [ 50%]  (Warmup)
-    ## Chain 4, Iteration: 1001 / 2000 [ 50%]  (Sampling)
-    ## Chain 4, Iteration: 1200 / 2000 [ 60%]  (Sampling)
-    ## Chain 4, Iteration: 1400 / 2000 [ 70%]  (Sampling)
-    ## Chain 4, Iteration: 1600 / 2000 [ 80%]  (Sampling)
-    ## Chain 4, Iteration: 1800 / 2000 [ 90%]  (Sampling)
-    ## Chain 4, Iteration: 2000 / 2000 [100%]  (Sampling)
-    ##  Elapsed Time: 2.164 seconds (Warm-up)
-    ##                2.025 seconds (Sampling)
-    ##                4.189 seconds (Total)
-    ## 
-    ## [1] "The following numerical problems occured the indicated number of times after warmup on chain 4"
-    ##                                                                                           count
-    ## Exception thrown at line 32: beta_log: Second shape parameter[2] is 0, but must be > 0!       4
-    ## Exception thrown at line 32: beta_log: Second shape parameter[166] is 0, but must be > 0!     1
-    ## [1] "When a numerical problem occurs, the Hamiltonian proposal gets rejected."
-    ## [1] "See http://mc-stan.org/misc/warnings.html#exception-hamiltonian-proposal-rejected"
-    ## [1] "If the number in the 'count' column is small,  do not ask about this message on stan-users."
-
 Which yields the following output:
 
 ``` r
@@ -255,14 +122,14 @@ summary(beta_stan_test)$summary
 ```
 
     ##                 mean      se_mean         sd        2.5%         25%
-    ## gamma[1]  -1.0057790 0.0004782705 0.03024848  -1.0642012  -1.0272746
-    ## gamma[2]   0.1664441 0.0004603292 0.02911377   0.1096610   0.1471425
-    ## gamma[3]  -0.2870644 0.0004942303 0.02993236  -0.3449547  -0.3074917
-    ## phi        9.6375716 0.0102017748 0.56065998   8.5417864   9.2717795
-    ## lp__     322.7166774 0.0291576921 1.31505108 319.3909697 322.0763129
+    ## gamma[1]  -1.0399200 0.0006063061 0.02884446  -1.0977598  -1.0586607
+    ## gamma[2]   0.2425668 0.0005165253 0.02881212   0.1839529   0.2229884
+    ## gamma[3]  -0.3727148 0.0005457226 0.02868729  -0.4284929  -0.3918674
+    ## phi       10.3567588 0.0120873295 0.60107470   9.2464216   9.9451109
+    ## lp__     354.2984507 0.0319870707 1.33182889 350.9633669 353.6696538
     ##                  50%         75%       97.5%    n_eff      Rhat
-    ## gamma[1]  -1.0062704  -0.9860921  -0.9456055 4000.000 1.0008322
-    ## gamma[2]   0.1669939   0.1863161   0.2231476 4000.000 1.0003099
-    ## gamma[3]  -0.2876310  -0.2664294  -0.2278951 3667.948 0.9996441
-    ## phi        9.6336181   9.9952216  10.7587095 3020.283 1.0003403
-    ## lp__     323.0359997 323.6735115 324.3143122 2034.131 1.0010029
+    ## gamma[1]  -1.0396760  -1.0206071  -0.9834121 2263.295 0.9994734
+    ## gamma[2]   0.2428035   0.2618348   0.2970961 3111.483 1.0012840
+    ## gamma[3]  -0.3723893  -0.3537642  -0.3175180 2763.345 1.0017644
+    ## phi       10.3367363  10.7655099  11.5955123 2472.841 1.0007849
+    ## lp__     354.6182545 355.2764974 355.9210539 1733.596 1.0009945

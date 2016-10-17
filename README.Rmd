@@ -15,7 +15,7 @@ This is code to implement beta regression similar to the [`betareg` package](htt
 
 A minimal simulation model can be used to relate the value of a beta distributed random variable, `y`, to two covariates, `x1` and `x2`.
 
-```{r, ggplot2}
+```{r, ggplot2, message = F, warning = F}
 library(betareg)
 library(rstan)
 library(dplyr)
@@ -47,7 +47,7 @@ summary(brmod)
 
 We can fit the same model Stan with the following code:
 
-```{r}
+```{r, message = F, warning = F, results = "hide"}
 
 stan_beta <- "
 data {
