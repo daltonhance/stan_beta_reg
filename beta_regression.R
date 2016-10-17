@@ -58,6 +58,7 @@ model {
 }
 "
 
+
 beta_stan_test <- stan(model_code = stan_beta,
      data       = dat,
      pars       = c("gamma", "phi"))
