@@ -17,7 +17,7 @@ x2 = rnorm(N)
 X = cbind(1, x1, x2)
 beta = c(-1,.2,-.3)
 gamma = c(2, -.25, .5)
-mu = plogis(X %*% beta)  # add noise if desired + rnorm(N, sd=.01)
+mu = plogis(X %*% beta) 
 phi = exp(X %*% gamma)
 A = mu*phi
 B = (1-mu)*phi

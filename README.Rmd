@@ -26,8 +26,8 @@ x1 = rnorm(N)
 x2 = rnorm(N)
 X = cbind(1, x1, x2)
 beta = c(-1,.2,-.3)
-gamma = c(2, .25, -.5)
-mu = plogis(X %*% beta)  # add noise if desired + rnorm(N, sd=.01)
+gamma = c(2, -.25, .5)
+mu = plogis(X %*% beta) 
 phi = exp(X %*% gamma)
 A = mu*phi
 B = (1-mu)*phi
@@ -125,7 +125,8 @@ beta_stan_test <- stan(model_code = stan_beta,
 ```
 
 
-Which yields the following output:
+Which yields the following output. Note that I'm currently having trouble with initial values causing the chain the fail to return samples. If you try to run this code, you may get the same error. If you try again, you may hit upon passable initial values which give you usable output.
+
 ```{r}
 summary(beta_stan_test)$summary
 ```
