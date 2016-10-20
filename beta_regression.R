@@ -2,14 +2,6 @@ library(betareg)
 library(rstan)
 library(dplyr)
 
-s = seq(0, 1, 0.01)
-mu = .9
-phi = 5
-a = mu*phi
-b = (1-mu)*phi
-qplot(s, dbeta(s, a,b), geom = "line")
-
-
 
 N = 500
 x1 = rnorm(N)
@@ -29,7 +21,6 @@ hist(y, 'FD')
 # model for later comparison
 brmod <- betareg(y ~ x1 + x2 | x1 + x2, data = data.frame(y, X[,-1]))
 summary(brmod)
-
 
 
 stan_beta <- "
@@ -76,11 +67,13 @@ generated quantities{
   real total_log_lik;
   real total_log_lik_rep;
 
-  int<lower=0, upper=1> p_omni;
+ int<lower=0, upper=1> p_omni;
 
 for (n in 1:N) {
   log_lik[n] = beta_lpdf(y[n] | A[n], B[n]);
   y_rep[n] = beta_rng(A[n], B[n]);
+  // if (is_nan(y_rep[n])) 
+     print(\"A[n]=\", A[n], \"; B[n]=\", B[n]); 
   log_lik_rep[n] = beta_lpdf(y_rep[n] | A[n], B[n]);
 }
 
@@ -103,8 +96,8 @@ dat = list(N = length(y),
 beta_stan_test <- stan(model_code = stan_beta,
                        data       = dat,
                        pars       = c("beta", "gamma"),
-                       chains = 5)
-
+                       iter = 100,
+                       chains = 1)
 
 
 summary(beta_stan_test)$summary
